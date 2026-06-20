@@ -92,7 +92,7 @@ RETURN
     UserRegion = "ALL" || DimStore[CountryName] = UserRegion
 ```
 
-Les responsables régionaux ne voient que leur région ; les profils « ALL » (direction) voient l'ensemble. Testé via la fonction « Voir comme ».
+Les responsables régionaux ne voient que leur région ; les profils « ALL » (direction) voient l'ensemble.
 
 **Données personnelles.** `DimCustomer` contient des PII (nom, adresse, date de naissance, coordonnées). Elles sont exclues des rapports diffusés ; la fiche client en drill-through est anonymisée (CustomerKey et attributs non identifiants uniquement).
 
