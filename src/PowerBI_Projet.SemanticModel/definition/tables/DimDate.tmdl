@@ -1,0 +1,198 @@
+/// Calendrier analytique. Table de dates officielle.
+table DimDate
+	lineageTag: 67b5c58f-4f55-4589-b60a-45d40bf576f3
+	dataCategory: Time
+
+	column Date
+		dataType: dateTime
+		isKey
+		formatString: Long Date
+		lineageTag: d0cf7119-ec0b-4d86-b699-70ebdc9089a8
+		summarizeBy: none
+		sourceColumn: Date
+
+		changedProperty = IsHidden
+
+		changedProperty = DataType
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column DateKey
+		dataType: string
+		isHidden
+		lineageTag: 2290b550-9724-4919-808a-6d07b0e9ddc8
+		summarizeBy: none
+		sourceColumn: DateKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Year
+		dataType: string
+		lineageTag: c2acccd1-45a0-4369-873b-56ba3e8cc5f1
+		summarizeBy: none
+		sourceColumn: Year
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column YearQuarter
+		dataType: string
+		lineageTag: d89e5af9-c44a-425d-b3d9-33a14405bfd2
+		summarizeBy: none
+		sourceColumn: YearQuarter
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column YearQuarterNumber
+		dataType: string
+		lineageTag: 55ea21c6-258a-4b65-9208-ee928f2a11ae
+		summarizeBy: none
+		sourceColumn: YearQuarterNumber
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Quarter
+		dataType: string
+		lineageTag: d8a60993-89c3-4964-9a3f-082e2ee56d74
+		summarizeBy: none
+		sourceColumn: Quarter
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column YearMonth
+		dataType: string
+		lineageTag: 733c621b-6947-457d-80de-88e3b7cf1494
+		summarizeBy: none
+		sourceColumn: YearMonth
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column YearMonthShort
+		dataType: string
+		lineageTag: acf40d71-9e65-4573-894d-059548f89888
+		summarizeBy: none
+		sourceColumn: YearMonthShort
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column YearMonthNumber
+		dataType: string
+		lineageTag: c4964938-eab8-42b0-9360-3051b7af7410
+		summarizeBy: none
+		sourceColumn: YearMonthNumber
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Month
+		dataType: string
+		lineageTag: 2e8e94e4-f1f3-4cef-a5f4-c1699e8e326c
+		summarizeBy: none
+		sourceColumn: Month
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column MonthShort
+		dataType: string
+		lineageTag: 334d7690-8be3-41f7-862f-ed8bc4fa3084
+		summarizeBy: none
+		sourceColumn: MonthShort
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column MonthNumber
+		dataType: string
+		lineageTag: 15200ea9-7d1e-4677-be34-f8616e9579ed
+		summarizeBy: none
+		sourceColumn: MonthNumber
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column DayofWeek
+		dataType: string
+		lineageTag: 09f98c9c-d73a-41c2-a565-2dfe4c2810a7
+		summarizeBy: none
+		sourceColumn: DayofWeek
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column DayofWeekShort
+		dataType: string
+		lineageTag: 61788887-dd54-4538-8701-b4235e045882
+		summarizeBy: none
+		sourceColumn: DayofWeekShort
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column DayofWeekNumber
+		dataType: string
+		lineageTag: f67d00d3-9381-47d6-8c4c-2f7be05ecd46
+		summarizeBy: none
+		sourceColumn: DayofWeekNumber
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column WorkingDay
+		dataType: string
+		lineageTag: 4d728384-1044-4618-a7bb-e4aee7e6fcaa
+		summarizeBy: none
+		sourceColumn: WorkingDay
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column WorkingDayNumber
+		dataType: string
+		lineageTag: 4d597ccc-70a0-4577-82c3-3232291dda6e
+		summarizeBy: none
+		sourceColumn: WorkingDayNumber
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimDate = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("D:\main data\Abed work\PowerBI\NordRetail\Data\date.csv"),[Delimiter=",", Columns=17, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    #"En-têtes promus" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Type modifié" = Table.TransformColumnTypes(#"En-têtes promus",{{"YearMonth", type text}, {"YearMonthShort", type text}})
+				in
+				    #"Type modifié"
+
+	changedProperty = IsHidden
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

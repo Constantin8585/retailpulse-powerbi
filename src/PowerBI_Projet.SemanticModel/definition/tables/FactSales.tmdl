@@ -1,0 +1,250 @@
+/// Transactions de vente. Grain : une ligne par produit dans une commande.
+table FactSales
+	lineageTag: d08c738a-1111-49c1-8687-5b928268057a
+
+	measure Revenue = SUMX(FactSales, FactSales[Quantity] * FactSales[NetPrice])
+		displayFolder: 01- Sales
+		lineageTag: c5bbcef4-eb9c-4d98-98e0-9a5c6ca8d184
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Cost' = SUMX(FactSales, FactSales[Quantity] * FactSales[UnitCost])
+		formatString: 0
+		displayFolder: 01- Sales
+		lineageTag: be07a926-fe3b-4cf1-9174-716b356ed33f
+
+	measure 'Quantity Sold' = SUM(FactSales[Quantity])
+		formatString: 0
+		displayFolder: 01- Sales
+		lineageTag: f82bedc1-438b-4b71-9be5-40a2450c11aa
+
+	measure 'Gross Margin' = [Revenue] - [Total Cost]
+		displayFolder: 01- Sales
+		lineageTag: 4b48a2da-a0ca-4a0b-9319-4c030de8f230
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Gross Margin %' = DIVIDE([Gross Margin], [Revenue])
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		displayFolder: 01- Sales
+		lineageTag: 7e37d90b-be4d-4196-aecc-b0980c1a84de
+
+	measure 'Revenue LY' =
+			
+			-- LY = Last Year : le CA de l'an dernier à la même période
+			CALCULATE(
+			    [Revenue],
+			    SAMEPERIODLASTYEAR(DimDate[Date])
+			)
+		displayFolder: 02- Time Intelligence
+		lineageTag: 13fec696-6e66-485e-b65f-0d51d05ba169
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Revenue YoY' = ```
+			
+			 -- Revenue YoY (Year-over-Year, l'écart en valeur)
+			 [Revenue] - [Revenue LY]
+			```
+		displayFolder: 02- Time Intelligence
+		lineageTag: d4142fcf-464f-4d6b-9e05-51ea3a5563cb
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Revenue YoY %' =
+			
+			-- l'écart en pourcentage
+			DIVIDE([Revenue YoY], [Revenue LY])
+		displayFolder: 02- Time Intelligence
+		lineageTag: 5e2ae141-59ba-4f44-9661-1ea3da08f56b
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Revenue YTD' =
+			
+			-- Revenue YTD (Year-To-Date, cumul depuis le 1er janvier)
+			TOTALYTD(
+			    [Revenue],
+			    DimDate[Date]
+			)
+		displayFolder: 02- Time Intelligence
+		lineageTag: e4e8162d-be80-431d-803c-31a57e8a890c
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column OrderKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: b42cc0cd-e692-440d-aaad-f7fc0f450398
+		summarizeBy: count
+		sourceColumn: OrderKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column LineNumber
+		dataType: int64
+		formatString: 0
+		lineageTag: 5600eb9c-0777-4e42-a217-c481ab9621b9
+		summarizeBy: sum
+		sourceColumn: LineNumber
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column OrderDate
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: cfbc5f46-ae0b-4739-acc4-e0acdff9c18c
+		summarizeBy: none
+		sourceColumn: OrderDate
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column DeliveryDate
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 1b5de9fa-0a1a-4039-b61b-2313ff9c5455
+		summarizeBy: none
+		sourceColumn: DeliveryDate
+
+		variation Variation
+			isDefault
+			relationship: 3d6ce5f8-4c72-4981-b04b-5fb33ab215f0
+			defaultHierarchy: LocalDateTable_c0818373-df8f-4f4f-b3b6-e717d91bd6de.'Hiérarchie de dates'
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column CustomerKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: fe1bdbf5-3ef3-4017-ad79-49aa0bbc8f08
+		summarizeBy: none
+		sourceColumn: CustomerKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column StoreKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 1e263081-04ec-4751-9ed5-41332f0cbade
+		summarizeBy: none
+		sourceColumn: StoreKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: eab4bc49-a415-4764-8aee-28ae6104a279
+		summarizeBy: none
+		sourceColumn: ProductKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Quantity
+		dataType: int64
+		formatString: 0
+		lineageTag: f375f667-24ff-4a55-9d4c-16a6942b4efd
+		summarizeBy: sum
+		sourceColumn: Quantity
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column UnitPrice
+		dataType: double
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: b95ece44-ff94-4408-897f-0de7181ce0c0
+		summarizeBy: sum
+		sourceColumn: UnitPrice
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column NetPrice
+		dataType: double
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: bc9687ce-a4db-4202-b629-8dddf03cbbe0
+		summarizeBy: sum
+		sourceColumn: NetPrice
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column UnitCost
+		dataType: double
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: 3a9b14cb-84cd-4c8a-94ee-0d2b35526def
+		summarizeBy: sum
+		sourceColumn: UnitCost
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column CurrencyCode
+		dataType: string
+		lineageTag: 1cb4431a-1fde-4f0a-91ea-7867cbf35adc
+		summarizeBy: none
+		sourceColumn: CurrencyCode
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column ExchangeRate
+		dataType: double
+		lineageTag: da5cb617-767d-41a6-9a3f-a4b53170f08d
+		summarizeBy: sum
+		sourceColumn: ExchangeRate
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition FactSales = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("D:\main data\Abed work\PowerBI\NordRetail\Data\sales.csv"),[Delimiter=",", Columns=13, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    #"En-têtes promus" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Type modifié" = Table.TransformColumnTypes(#"En-têtes promus",{{"OrderKey", Int64.Type}, {"LineNumber", Int64.Type}, {"OrderDate", type date}, {"DeliveryDate", type date}, {"CustomerKey", Int64.Type}, {"StoreKey", Int64.Type}, {"ProductKey", Int64.Type}, {"Quantity", Int64.Type}, {"UnitPrice", type text}, {"NetPrice", type text}, {"UnitCost", type text}, {"CurrencyCode", type text}, {"ExchangeRate", type text}}),
+				    #"Type modifié avec paramètres régionaux" = Table.TransformColumnTypes(#"Type modifié", {{"UnitPrice", type number}}, "en-US"),
+				    #"Type modifié avec paramètres régionaux1" = Table.TransformColumnTypes(#"Type modifié avec paramètres régionaux", {{"NetPrice", type number}}, "en-US"),
+				    #"Type modifié avec paramètres régionaux2" = Table.TransformColumnTypes(#"Type modifié avec paramètres régionaux1", {{"UnitCost", type number}}, "en-US"),
+				    #"Type modifié avec paramètres régionaux3" = Table.TransformColumnTypes(#"Type modifié avec paramètres régionaux2", {{"ExchangeRate", type number}}, "en-US")
+				in
+				    #"Type modifié avec paramètres régionaux3"
+
+	changedProperty = IsHidden
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

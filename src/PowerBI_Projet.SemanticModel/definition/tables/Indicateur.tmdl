@@ -1,0 +1,49 @@
+table Indicateur
+	lineageTag: f1bd30f0-0abd-4d4f-acd7-c7a717186194
+
+	column Indicateur
+		lineageTag: ab42951a-416a-43b6-a4a9-53ce5ae8da81
+		summarizeBy: none
+		sourceColumn: [Value1]
+		sortByColumn: 'Indicateur Commande'
+
+		relatedColumnDetails
+			groupByColumn: 'Indicateur Champs'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Indicateur Champs'
+		isHidden
+		lineageTag: 0bff3f29-e7b7-4055-9d0e-f6ed11d1edac
+		summarizeBy: none
+		sourceColumn: [Value2]
+		sortByColumn: 'Indicateur Commande'
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Indicateur Commande'
+		isHidden
+		formatString: 0
+		lineageTag: 25609633-397b-41f6-b1be-455f8a8292e3
+		summarizeBy: sum
+		sourceColumn: [Value3]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Indicateur = calculated
+		mode: import
+		source =
+				{
+				    ("Revenue", NAMEOF('FactSales'[Revenue]), 0),
+				    ("Gross Margin %", NAMEOF('FactSales'[Gross Margin %]), 1),
+				    ("Quantity Sold", NAMEOF('FactSales'[Quantity Sold]), 2)
+				}
+
+	annotation PBI_Id = a00d5a37711a4b3aaf5993877ed15a2d
+

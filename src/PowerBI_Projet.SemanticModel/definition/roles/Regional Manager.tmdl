@@ -1,0 +1,15 @@
+role 'Regional Manager'
+	modelPermission: read
+
+	tablePermission DimStore =
+			VAR UserRegion =
+			    LOOKUPVALUE(
+			        DimUser[Region],
+			        DimUser[Email],
+			        USERPRINCIPALNAME()
+			    )
+			RETURN
+			    UserRegion = "ALL" || DimStore[CountryName] = UserRegion
+
+	annotation PBI_Id = 01af5157eaf9426c8bc7cab4775c7fbe
+

@@ -1,0 +1,35 @@
+table 'Time Intelligence'
+	lineageTag: 3a7f28af-f447-47d5-ba43-9a0224bd7a21
+
+	calculationGroup
+
+		calculationItem Current = SELECTEDMEASURE()
+
+		calculationItem YTD = TOTALYTD(SELECTEDMEASURE(), DimDate[Date])
+
+		calculationItem MTD = TOTALMTD(SELECTEDMEASURE(), DimDate[Date])
+
+		calculationItem QTD = TOTALQTD(SELECTEDMEASURE(), DimDate[Date])
+
+		calculationItem 'Previous Year' = CALCULATE(SELECTEDMEASURE(), SAMEPERIODLASTYEAR(DimDate[Date]))
+
+		calculationItem 'YoY Difference' = SELECTEDMEASURE() - CALCULATE(SELECTEDMEASURE(), SAMEPERIODLASTYEAR(DimDate[Date]))
+
+		calculationItem 'YoY Percentage' =
+				DIVIDE(
+				    SELECTEDMEASURE() - CALCULATE(SELECTEDMEASURE(), SAMEPERIODLASTYEAR(DimDate[Date])),
+				    CALCULATE(SELECTEDMEASURE(), SAMEPERIODLASTYEAR(DimDate[Date]))
+				)
+
+	column Ordinal
+		dataType: int64
+		isHidden
+		lineageTag: f804733e-2f22-4f97-8f44-504a88347234
+		sourceColumn: Ordinal
+
+	column 'Time Calc'
+		dataType: string
+		lineageTag: 1193db45-4e37-4240-bd5e-74bfa19a73b9
+		sourceColumn: Name
+		sortByColumn: Ordinal
+

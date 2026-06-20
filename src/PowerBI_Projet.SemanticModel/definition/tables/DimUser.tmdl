@@ -1,0 +1,55 @@
+table DimUser
+	lineageTag: 3aea4890-4ec5-4124-99a7-ec3ffbd31c17
+
+	column Email
+		lineageTag: 3697a7ec-ab92-4e0b-8258-dea20cf6cfeb
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Email]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Region
+		lineageTag: 26a862bc-ca54-4f45-bafb-efd37bbe5aa0
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Region]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Category
+		lineageTag: 6f4b6ed8-431b-470b-97fc-9e9d4e3fe068
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Category]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Role
+		lineageTag: 1eb3ecc6-c024-4792-babe-c6479b96d141
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Role]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimUser = calculated
+		mode: import
+		source =
+				
+				DATATABLE(
+				    "Email", STRING,
+				    "Region", STRING,
+				    "Category", STRING,
+				    "Role", STRING,
+				    {
+				        { "komi.gadegbe@etudiant.unimes.fr", "France", "ALL", "Regional Manager" },
+				        { "exec@nordretail.com", "ALL", "ALL", "Executive" },
+				        { "manager.de@nordretail.com", "Germany", "ALL", "Regional Manager" },
+				        { "buyer.audio@nordretail.com", "ALL", "Audio", "Category Buyer" },
+				        { "dpo@nordretail.com", "ALL", "ALL", "DPO" }
+				    }
+				)
+
+	annotation PBI_Id = 02b04dbf267e4e4abb6d2298daeb1f63
+

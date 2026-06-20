@@ -1,0 +1,85 @@
+/// Référentiel des campagnes promotionnelles.
+table DimPromotion
+	lineageTag: dbf04397-8c69-4661-bc46-a9c1d65bc24e
+
+	column PromotionKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 6883ffdc-afe9-4b05-8ae4-6ccdabbaa25b
+		summarizeBy: count
+		sourceColumn: PromotionKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column PromotionType
+		dataType: string
+		lineageTag: 16481148-c81d-47b1-8683-793ca4a2fb33
+		summarizeBy: none
+		sourceColumn: PromotionType
+
+		annotation SummarizationSetBy = Automatic
+
+	column PromotionName
+		dataType: string
+		lineageTag: 1d238fd4-602b-475c-8734-2dbfff1e3ad5
+		summarizeBy: none
+		sourceColumn: PromotionName
+
+		annotation SummarizationSetBy = Automatic
+
+	column StartDate
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 8330775e-4e41-4b08-b318-9f32c8f76572
+		summarizeBy: none
+		sourceColumn: StartDate
+
+		variation Variation
+			isDefault
+			relationship: 5cf3a13c-4ae9-4759-b85a-eded1db0f2e6
+			defaultHierarchy: LocalDateTable_57fee873-8abc-422f-bcc4-785f5911f355.'Hiérarchie de dates'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column EndDate
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 906badcf-6225-4f79-a079-adf49dd927be
+		summarizeBy: none
+		sourceColumn: EndDate
+
+		variation Variation
+			isDefault
+			relationship: b9c4c5eb-75fe-41c8-b42a-a077128395c9
+			defaultHierarchy: LocalDateTable_22c008fc-ae40-4f6b-98f3-832ebc33c1e1.'Hiérarchie de dates'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column DiscountRate
+		dataType: double
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: 43dee833-1b42-47d0-9631-57d7770bf1b4
+		summarizeBy: sum
+		sourceColumn: DiscountRate
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimPromotion = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("D:\main data\Abed work\PowerBI\NordRetail\Data\promotion.csv"),[Delimiter=",", Columns=6, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+				    #"En-têtes promus" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Type modifié" = Table.TransformColumnTypes(#"En-têtes promus",{{"PromotionKey", Int64.Type}, {"PromotionType", type text}, {"PromotionName", type text}, {"StartDate", type date}, {"EndDate", type date}, {"DiscountRate", type text}}),
+				    #"Type modifié avec paramètres régionaux" = Table.TransformColumnTypes(#"Type modifié", {{"DiscountRate", type number}}, "en-US")
+				in
+				    #"Type modifié avec paramètres régionaux"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

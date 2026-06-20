@@ -1,0 +1,143 @@
+/// Référentiel produit : catégorie, sous-catégorie, marque, prix.
+table DimProduct
+	lineageTag: abfe1e15-e1c8-49ef-9548-fbc43fa59453
+
+	column ProductKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 52254616-4ef1-42df-8630-a3e48c84e54e
+		summarizeBy: none
+		sourceColumn: ProductKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductCode
+		dataType: string
+		lineageTag: a919c7e2-d8d2-4855-aefd-facc1a11b2db
+		summarizeBy: none
+		sourceColumn: ProductCode
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductName
+		dataType: string
+		lineageTag: 408c4b83-56fc-4fd2-b225-25aed3f40c9a
+		summarizeBy: none
+		sourceColumn: ProductName
+
+		annotation SummarizationSetBy = Automatic
+
+	column Manufacturer
+		dataType: string
+		lineageTag: 380deecc-56cb-484b-9a0b-93f8be887e4d
+		summarizeBy: none
+		sourceColumn: Manufacturer
+
+		annotation SummarizationSetBy = Automatic
+
+	column Brand
+		dataType: string
+		lineageTag: 3090b199-c2e4-4d32-8aa4-0abe613f0eb3
+		summarizeBy: none
+		sourceColumn: Brand
+
+		annotation SummarizationSetBy = Automatic
+
+	column Color
+		dataType: string
+		lineageTag: ffe7fd2e-969b-4749-ad54-0928875a492e
+		summarizeBy: none
+		sourceColumn: Color
+
+		annotation SummarizationSetBy = Automatic
+
+	column WeightUnit
+		dataType: string
+		lineageTag: 178270bd-51ba-480c-a690-569514f7f1db
+		summarizeBy: none
+		sourceColumn: WeightUnit
+
+		annotation SummarizationSetBy = Automatic
+
+	column Weight
+		dataType: double
+		lineageTag: 0288dfb7-92ee-4ae8-ae9c-f4b9f341cdcd
+		summarizeBy: sum
+		sourceColumn: Weight
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Cost
+		dataType: double
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: 21c9d8b5-ed7b-470f-bff8-1358744c22c2
+		summarizeBy: sum
+		sourceColumn: Cost
+
+		annotation SummarizationSetBy = Automatic
+
+	column Price
+		dataType: double
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: 0eabe5a4-67c4-4df6-bf22-272816028c01
+		summarizeBy: sum
+		sourceColumn: Price
+
+		annotation SummarizationSetBy = Automatic
+
+	column CategoryKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 4117fb89-b495-4829-be8c-2ad3c05ab0cb
+		summarizeBy: count
+		sourceColumn: CategoryKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column CategoryName
+		dataType: string
+		lineageTag: a86a44a6-f1f3-4f27-8544-6e0bf8185bc7
+		summarizeBy: none
+		sourceColumn: CategoryName
+
+		annotation SummarizationSetBy = Automatic
+
+	column SubCategoryKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 6d1ccc5f-22c3-4b3f-90fe-0f0ae0d59bc3
+		summarizeBy: count
+		sourceColumn: SubCategoryKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column SubCategoryName
+		dataType: string
+		lineageTag: e1302391-3da5-401d-98d6-7222c552dd8f
+		summarizeBy: none
+		sourceColumn: SubCategoryName
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimProduct = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("D:\main data\Abed work\PowerBI\NordRetail\Data\product.csv"),[Delimiter=",", Columns=14, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    #"En-têtes promus" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Type modifié" = Table.TransformColumnTypes(#"En-têtes promus",{{"ProductKey", Int64.Type}, {"ProductCode", type text}, {"ProductName", type text}, {"Manufacturer", type text}, {"Brand", type text}, {"Color", type text}, {"WeightUnit", type text}, {"Weight", type text}, {"Cost", type text}, {"Price", type text}, {"CategoryKey", Int64.Type}, {"CategoryName", type text}, {"SubCategoryKey", Int64.Type}, {"SubCategoryName", type text}}),
+				    #"Type modifié avec paramètres régionaux" = Table.TransformColumnTypes(#"Type modifié", {{"Cost", type number}}, "en-US"),
+				    #"Type modifié avec paramètres régionaux1" = Table.TransformColumnTypes(#"Type modifié avec paramètres régionaux", {{"Price", type number}}, "en-US"),
+				    #"Type modifié avec paramètres régionaux2" = Table.TransformColumnTypes(#"Type modifié avec paramètres régionaux1", {{"Weight", type number}}, "en-US")
+				in
+				    #"Type modifié avec paramètres régionaux2"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

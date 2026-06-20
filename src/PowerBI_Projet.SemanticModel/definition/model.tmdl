@@ -1,0 +1,46 @@
+model Model
+	culture: fr-FR
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	discourageImplicitMeasures
+	sourceQueryCulture: fr-FR
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+/// Erreurs dans les requêtes qui ont été chargées sur 17/06/2026 11:44:26.
+queryGroup 'Erreurs des requêtes – 17/06/2026 11:44:26'
+
+	annotation PBI_QueryGroupOrder = 0
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_QueryOrder = ["FactSales","DimCustomer","DimProduct","DimStore","DimDate","DimPromotion","FactInventory","Erreurs dans customer"]
+
+annotation __TEdtr = 1
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table FactSales
+ref table DateTableTemplate_05fceacc-b4b4-48ae-be9a-119f49bfcd88
+ref table LocalDateTable_c0818373-df8f-4f4f-b3b6-e717d91bd6de
+ref table DimCustomer
+ref table LocalDateTable_af07db78-6b1f-4360-a90a-7b460b7c1352
+ref table LocalDateTable_da6ce2ae-1dd6-4480-9c1f-c87bc9db8253
+ref table LocalDateTable_2a8cdde8-ba79-4016-83b5-3f6514ebaeb6
+ref table DimProduct
+ref table DimStore
+ref table LocalDateTable_4cd3fb52-ed78-41e6-b5b5-5961c98fd129
+ref table LocalDateTable_86dd263f-a3ec-4d59-80bc-ba6d875d9ae6
+ref table DimDate
+ref table DimPromotion
+ref table LocalDateTable_57fee873-8abc-422f-bcc4-785f5911f355
+ref table LocalDateTable_22c008fc-ae40-4f6b-98f3-832ebc33c1e1
+ref table FactInventory
+ref table 'Time Intelligence'
+ref table Indicateur
+ref table DimUser
+
+ref role 'Regional Manager'
+
+ref cultureInfo fr-FR
+

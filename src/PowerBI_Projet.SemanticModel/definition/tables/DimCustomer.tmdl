@@ -1,0 +1,270 @@
+/// Référentiel client. Contient des données personnelles (PII).
+table DimCustomer
+	lineageTag: 2879d9a0-16b0-4739-b917-9517fb50f2a6
+
+	measure 'Active Customers' = DISTINCTCOUNT(FactSales[CustomerKey])
+		formatString: 0
+		displayFolder: 03- Customer
+		lineageTag: 66892bb6-e819-4ea7-8ab5-ce95b1b42aad
+
+	measure 'Repeat Customers' =
+			
+			COUNTROWS(
+			    FILTER(
+			        VALUES(FactSales[CustomerKey]),
+			        CALCULATE(DISTINCTCOUNT(FactSales[OrderKey])) > 1
+			    )
+			)
+		formatString: 0
+		displayFolder: 03- Customer
+		lineageTag: ccf713f0-a480-45ff-ab32-96ec3cac863f
+
+	measure 'Customer Retention Rate' = DIVIDE([Repeat Customers], [Active Customers])
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		displayFolder: 03- Customer
+		lineageTag: a27b0fdd-c17c-4013-8772-f02ebdb9b676
+
+	column CustomerKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 8d5a6f57-52b5-4203-8c7a-13ee593e8c31
+		summarizeBy: none
+		sourceColumn: CustomerKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column GeoAreaKey
+		dataType: int64
+		formatString: 0
+		lineageTag: ed8ae8fd-b664-42f7-9379-131d8f177c63
+		summarizeBy: count
+		sourceColumn: GeoAreaKey
+
+		annotation SummarizationSetBy = Automatic
+
+	column StartDT
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: d4da10f1-7b96-4670-a170-488d85a480da
+		summarizeBy: none
+		sourceColumn: StartDT
+
+		variation Variation
+			isDefault
+			relationship: c2908bb0-7077-44a8-bc65-8f6c5e863ff0
+			defaultHierarchy: LocalDateTable_af07db78-6b1f-4360-a90a-7b460b7c1352.'Hiérarchie de dates'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column EndDT
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: d41b9b49-8cc5-486d-bcb2-e5b2d319a808
+		summarizeBy: none
+		sourceColumn: EndDT
+
+		variation Variation
+			isDefault
+			relationship: ff5112aa-86d7-49b2-bee1-44a5ba7ad0dc
+			defaultHierarchy: LocalDateTable_da6ce2ae-1dd6-4480-9c1f-c87bc9db8253.'Hiérarchie de dates'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Continent
+		dataType: string
+		lineageTag: f909a984-02d3-420d-a627-253b04cb1692
+		summarizeBy: none
+		sourceColumn: Continent
+
+		annotation SummarizationSetBy = Automatic
+
+	column Gender
+		dataType: string
+		lineageTag: df939307-7fbb-4e03-9757-ed899b73d8ff
+		summarizeBy: none
+		sourceColumn: Gender
+
+		annotation SummarizationSetBy = Automatic
+
+	column Title
+		dataType: string
+		lineageTag: 1ed288cf-ea7f-463b-91ea-19fdcce504e0
+		summarizeBy: none
+		sourceColumn: Title
+
+		annotation SummarizationSetBy = Automatic
+
+	column GivenName
+		dataType: string
+		lineageTag: ce3377bc-5d5e-4944-9ac6-b31312cf0c68
+		summarizeBy: none
+		sourceColumn: GivenName
+
+		annotation SummarizationSetBy = Automatic
+
+	column MiddleInitial
+		dataType: string
+		lineageTag: b8422dff-adf6-42ce-b121-5c1a225f790f
+		summarizeBy: none
+		sourceColumn: MiddleInitial
+
+		annotation SummarizationSetBy = Automatic
+
+	column Surname
+		dataType: string
+		lineageTag: ccc92df3-ab24-475e-b6ac-fb26608813aa
+		summarizeBy: none
+		sourceColumn: Surname
+
+		annotation SummarizationSetBy = Automatic
+
+	column StreetAddress
+		dataType: string
+		lineageTag: b3dec8c5-a140-471c-9dd3-68622dee1eb5
+		summarizeBy: none
+		sourceColumn: StreetAddress
+
+		annotation SummarizationSetBy = Automatic
+
+	column City
+		dataType: string
+		lineageTag: 0faa2af8-b916-444d-815b-6bee3679ede1
+		summarizeBy: none
+		sourceColumn: City
+
+		annotation SummarizationSetBy = Automatic
+
+	column State
+		dataType: string
+		lineageTag: d9645548-6738-4c48-a625-952349092d3b
+		summarizeBy: none
+		sourceColumn: State
+
+		annotation SummarizationSetBy = Automatic
+
+	column StateFull
+		dataType: string
+		lineageTag: 5d6e84ae-a6a9-45c1-87cb-514611e1a786
+		summarizeBy: none
+		sourceColumn: StateFull
+
+		annotation SummarizationSetBy = Automatic
+
+	column ZipCode
+		dataType: string
+		lineageTag: ee5aa9df-fa5f-4e0a-bccf-aee257435237
+		summarizeBy: none
+		sourceColumn: ZipCode
+
+		annotation SummarizationSetBy = Automatic
+
+	column Country
+		dataType: string
+		lineageTag: f7a386fd-a2ff-4499-a26b-643053314aff
+		summarizeBy: none
+		sourceColumn: Country
+
+		annotation SummarizationSetBy = Automatic
+
+	column CountryFull
+		dataType: string
+		lineageTag: 9e091c97-257e-4d84-a94b-b5c5185314af
+		summarizeBy: none
+		sourceColumn: CountryFull
+
+		annotation SummarizationSetBy = Automatic
+
+	column Birthday
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 4d300693-10bc-4ca8-8be4-0cecaae3c9bd
+		summarizeBy: none
+		sourceColumn: Birthday
+
+		variation Variation
+			isDefault
+			relationship: 39d74ce3-723d-4c40-8fc6-7bd3318cf325
+			defaultHierarchy: LocalDateTable_2a8cdde8-ba79-4016-83b5-3f6514ebaeb6.'Hiérarchie de dates'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Age
+		dataType: int64
+		lineageTag: 7787a85d-98b4-453f-b9cd-5171702ac32c
+		summarizeBy: sum
+		sourceColumn: Age
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Occupation
+		dataType: string
+		lineageTag: 34e42dec-dd31-4377-b57a-ccb3a2bd34e4
+		summarizeBy: none
+		sourceColumn: Occupation
+
+		annotation SummarizationSetBy = Automatic
+
+	column Company
+		dataType: string
+		lineageTag: b622b05a-237c-46c5-b3a9-83f7e127cced
+		summarizeBy: none
+		sourceColumn: Company
+
+		annotation SummarizationSetBy = Automatic
+
+	column Vehicle
+		dataType: string
+		lineageTag: 7433e22b-9bea-4675-9284-b346f787c9f3
+		summarizeBy: none
+		sourceColumn: Vehicle
+
+		annotation SummarizationSetBy = Automatic
+
+	column Latitude
+		dataType: double
+		lineageTag: aca71434-6bc5-49bb-a64b-ebce2f217b62
+		summarizeBy: sum
+		sourceColumn: Latitude
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Longitude
+		dataType: double
+		lineageTag: 241fdfbf-276d-4742-bb0c-6f06ea75f624
+		summarizeBy: sum
+		sourceColumn: Longitude
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition DimCustomer = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("D:\main data\Abed work\PowerBI\NordRetail\Data\customer.csv"),[Delimiter=",", Columns=24, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    #"En-têtes promus" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Type modifié" = Table.TransformColumnTypes(#"En-têtes promus",{{"CustomerKey", Int64.Type}, {"GeoAreaKey", Int64.Type}, {"StartDT", type date}, {"EndDT", type date}, {"Continent", type text}, {"Gender", type text}, {"Title", type text}, {"GivenName", type text}, {"MiddleInitial", type text}, {"Surname", type text}, {"StreetAddress", type text}, {"City", type text}, {"State", type text}, {"StateFull", type text}, {"ZipCode", type text}, {"Country", type text}, {"CountryFull", type text}, {"Birthday", type date}, {"Age", Int64.Type}, {"Occupation", type text}, {"Company", type text}, {"Vehicle", type text}, {"Latitude", type text}, {"Longitude", type text}}),
+				    #"Type modifié avec paramètres régionaux" = Table.TransformColumnTypes(#"Type modifié", {{"Latitude", type number}}, "en-US"),
+				    #"Type modifié avec paramètres régionaux1" = Table.TransformColumnTypes(#"Type modifié avec paramètres régionaux", {{"Longitude", type number}}, "en-US"),
+				    #"Type modifié1" = Table.TransformColumnTypes(#"Type modifié avec paramètres régionaux1",{{"ZipCode", type text}})
+				in
+				    #"Type modifié1"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,23 @@
+expression 'Erreurs dans customer' =
+		let
+		Source = DimCustomer,
+		  #"Incompatibilités de types détectées" = let
+		    tableWithOnlyPrimitiveTypes = Table.SelectColumns(Source, Table.ColumnsOfType(Source, {type nullable number, type nullable text, type nullable logical, type nullable date, type nullable datetime, type nullable datetimezone, type nullable time, type nullable duration})),
+		    recordTypeFields = Type.RecordFields(Type.TableRow(Value.Type(tableWithOnlyPrimitiveTypes))),
+		    fieldNames = Record.FieldNames(recordTypeFields),
+		    fieldTypes = List.Transform(Record.ToList(recordTypeFields), each [Type]),
+		    pairs = List.Transform(List.Positions(fieldNames), (i) => {fieldNames{i}, (v) => if v = null or Value.Is(v, fieldTypes{i}) then v else error [Message = "Le type de la valeur ne correspond pas à celui de la colonne.", Detail = v], fieldTypes{i}})
+		in
+		    Table.TransformColumns(Source, pairs),
+		  #"Index ajouté" = Table.AddIndexColumn(#"Incompatibilités de types détectées", "Numéro de ligne" ,1),
+		  #"Conserver les erreurs" = Table.SelectRowsWithErrors(#"Index ajouté", {"CustomerKey", "GeoAreaKey", "StartDT", "EndDT", "Continent", "Gender", "Title", "GivenName", "MiddleInitial", "Surname", "StreetAddress", "City", "State", "StateFull", "ZipCode", "Country", "CountryFull", "Birthday", "Age", "Occupation", "Company", "Vehicle", "Latitude", "Longitude"}),
+		  #"Colonnes permutées" = Table.ReorderColumns(#"Conserver les erreurs", {"Numéro de ligne", "CustomerKey", "GeoAreaKey", "StartDT", "EndDT", "Continent", "Gender", "Title", "GivenName", "MiddleInitial", "Surname", "StreetAddress", "City", "State", "StateFull", "ZipCode", "Country", "CountryFull", "Birthday", "Age", "Occupation", "Company", "Vehicle", "Latitude", "Longitude"})
+		in
+		  #"Colonnes permutées"
+	lineageTag: 7c7b8d29-9f55-4984-a7db-157ff05786d5
+	queryGroup: 'Erreurs des requêtes – 17/06/2026 11:44:26'
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
