@@ -154,5 +154,51 @@
       ]
     },
     "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "163aeb000e7596083100",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "DimProduct"
+              }
+            },
+            "Property": "CategoryName"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "e6dd96ac9b6cc708aac7",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "FactInventory"
+              }
+            },
+            "Property": "Days of Stock"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "28940bf21e0d2b15b330",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "FactInventory"
+              }
+            },
+            "Property": "Stock Coverage Alert"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
   }
 }
